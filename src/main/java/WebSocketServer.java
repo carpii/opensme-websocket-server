@@ -1,17 +1,18 @@
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.glassfish.tyrus.server.Server;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
+import handlers.Router;
 
 @ServerEndpoint(value = "/ws")
 public class WebSocketServer {
 
 	private static final int PORT = 8025;
-	private static final String DB_PATH = Paths.get("db", "sme").toString();
 
 	@OnOpen
 	public void onOpen(Session session) {
@@ -19,11 +20,25 @@ public class WebSocketServer {
 	}
 
 	@OnMessage
-	public void onMessage(String message, Session session) throws IOException {
-		if ("SHOW TABLES".equalsIgnoreCase(message.trim())) {
-			session.getBasicRemote().sendText(getTableList());
-		} else {
-			session.getBasicRemote().sendText("ACK: " + message);
+	public void onMessage(String rawMessage, Session session) throws IOException {
+		try {
+			JSONObject message = new JSONObject(rawMessage);
+
+			if (!message.has("requestID") || !message.has("action")) {
+				throw new IllegalArgumentException("Missing required fields: requestID and action");
+			}
+
+			String requestId = message.getString("requestID");
+			String action = message.getString("action");
+			JSONObject data = message.optJSONObject("data");
+
+			String result = Router.handle(requestId, action, data);
+			session.getBasicRemote().sendText(result);
+		} catch (Exception e) {
+			JSONObject error = new JSONObject();
+			error.put("requestID", "unknown");
+			error.put("error", "Invalid request: " + e.getMessage());
+			session.getBasicRemote().sendText(error.toString());
 		}
 	}
 
@@ -35,19 +50,6 @@ public class WebSocketServer {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		System.err.println("Error from " + session.getId() + ": " + throwable.getMessage());
-	}
-
-	private String getTableList() {
-		StringBuilder result = new StringBuilder();
-		try (Connection conn = DriverManager.getConnection("jdbc:h2:" + DB_PATH);
-			ResultSet rs = conn.getMetaData().getTables(null, null, "%", new String[]{"TABLE"})) {
-			while (rs.next()) {
-				result.append(rs.getString("TABLE_NAME")).append("\n");
-			}
-		} catch (SQLException e) {
-			return "DB error: " + e.getMessage();
-		}
-		return result.length() > 0 ? result.toString().trim() : "(no tables)";
 	}
 
 	public static void main(String[] args) {

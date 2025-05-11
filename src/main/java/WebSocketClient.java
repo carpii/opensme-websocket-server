@@ -1,5 +1,8 @@
 import jakarta.websocket.*;
+import org.json.JSONObject;
+
 import java.net.URI;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 @ClientEndpoint
@@ -9,18 +12,23 @@ public class WebSocketClient {
 
 	@OnOpen
 	public void onOpen(Session session) {
-		System.out.println("Connection established");
 		try {
-			session.getBasicRemote().sendText("SHOW TABLES");
+			JSONObject msg = new JSONObject();
+			msg.put("requestID", UUID.randomUUID().toString());
+			msg.put("action", "table.get");
+			session.getAsyncRemote().sendText(msg.toString());
 		} catch (Exception e) {
-			System.err.println("Failed to send message: " + e.getMessage());
+			JSONObject error = new JSONObject();
+			error.put("error", "Failed to send message");
+			error.put("detail", e.getMessage());
+			System.err.println(error.toString());
 			latch.countDown();
 		}
 	}
 
 	@OnMessage
 	public void onMessage(String message, Session session) {
-		System.out.println("Server response:\n" + message);
+		System.out.println(message);
 		latch.countDown();
 		try {
 			session.close();
@@ -29,12 +37,15 @@ public class WebSocketClient {
 
 	@OnClose
 	public void onClose(Session session, CloseReason reason) {
-		System.out.println("Connection closed: " + reason);
+		// Do nothing
 	}
 
 	@OnError
 	public void onError(Session session, Throwable throwable) {
-		System.err.println("Error: " + throwable.getMessage());
+		JSONObject error = new JSONObject();
+		error.put("error", "WebSocket error");
+		error.put("detail", throwable.getMessage());
+		System.err.println(error.toString());
 		latch.countDown();
 	}
 
