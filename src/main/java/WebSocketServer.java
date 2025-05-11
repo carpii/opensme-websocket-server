@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.UUID;
 import handlers.Router;
+
 
 @ServerEndpoint(value = "/ws")
 public class WebSocketServer {
@@ -20,28 +22,23 @@ public class WebSocketServer {
 	}
 
 	@OnMessage
-	public void onMessage(String rawMessage, Session session) throws IOException {
+	public void onMessage(String message, Session session) {
+		System.out.println("Received: " + message); // log incoming message
 		try {
-			JSONObject message = new JSONObject(rawMessage);
-
-			if (!message.has("requestID") || !message.has("action")) {
-				throw new IllegalArgumentException("Missing required fields: requestID and action");
-			}
-
-			String requestId = message.getString("requestID");
-			String action = message.getString("action");
-			JSONObject data = message.optJSONObject("data");
-
-			String result = Router.handle(requestId, action, data);
-			session.getBasicRemote().sendText(result);
+			JSONObject json = new JSONObject(message);
+			String requestId = json.optString("requestID", UUID.randomUUID().toString());
+			String action = json.optString("action", "");
+			JSONObject data = json.optJSONObject("data");
+			String response = Router.handle(requestId, action, data);
+			session.getAsyncRemote().sendText(response);
 		} catch (Exception e) {
 			JSONObject error = new JSONObject();
-			error.put("requestID", "unknown");
-			error.put("error", "Invalid request: " + e.getMessage());
-			session.getBasicRemote().sendText(error.toString());
+			error.put("requestID", UUID.randomUUID().toString());
+			error.put("error", "Invalid message format: " + e.getMessage());
+			session.getAsyncRemote().sendText(error.toString());
 		}
 	}
-
+	
 	@OnClose
 	public void onClose(Session session, CloseReason reason) {
 		System.out.println("Disconnected: " + session.getId() + " (" + reason + ")");
