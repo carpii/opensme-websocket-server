@@ -15,7 +15,9 @@ public class WebSocketClient {
 		try {
 			JSONObject msg = new JSONObject();
 			msg.put("requestID", UUID.randomUUID().toString());
-			msg.put("action", "table.get");
+			msg.put("action", "portfolio.list");
+			msg.put("data", new JSONObject()); // empty payload for list
+
 			session.getAsyncRemote().sendText(msg.toString());
 		} catch (Exception e) {
 			JSONObject error = new JSONObject();
@@ -37,7 +39,7 @@ public class WebSocketClient {
 
 	@OnClose
 	public void onClose(Session session, CloseReason reason) {
-		// Do nothing
+		// no-op
 	}
 
 	@OnError

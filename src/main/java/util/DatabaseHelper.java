@@ -1,19 +1,42 @@
+package util;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.sql.*;
 
+/**
+ * Utility class for executing common database queries.
+ */
 public class DatabaseHelper {
 
-	private static final String DB_PATH = "jdbc:h2:./db/sme";
+	/**
+	 * Returns all rows from the given table as a JSON array of objects.
+	 *
+	 * @param tableName name of the table to query
+	 * @return JSONArray of rows
+	 * @throws SQLException if the query fails
+	 */
+	public static JSONArray fetchAllRows(String tableName) throws SQLException {
+		JSONArray results = new JSONArray();
 
-	public static String getTableList() {
-		StringBuilder result = new StringBuilder();
-		try (Connection conn = DriverManager.getConnection(DB_PATH);
-			ResultSet rs = conn.getMetaData().getTables(null, null, "%", new String[]{"TABLE"})) {
+		try (
+			Connection conn = DriverManager.getConnection("jdbc:h2:./db/sme");
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + tableName);
+			ResultSet rs = stmt.executeQuery()
+		) {
+			ResultSetMetaData meta = rs.getMetaData();
+			int columnCount = meta.getColumnCount();
+
 			while (rs.next()) {
-				result.append(rs.getString("TABLE_NAME")).append("\n");
+				JSONObject row = new JSONObject();
+				for (int i = 1; i <= columnCount; i++) {
+					row.put(meta.getColumnName(i), rs.getObject(i));
+				}
+				results.put(row);
 			}
-		} catch (SQLException e) {
-			return "DB error: " + e.getMessage();
 		}
-		return result.length() > 0 ? result.toString().trim() : "(no tables)";
+
+		return results;
 	}
 }

@@ -2,18 +2,13 @@ package handlers.portfolio;
 
 import handlers.HandlerInterface;
 import org.json.JSONObject;
-
+import org.json.JSONArray;
+import util.DatabaseHelper;
 
 /**
  * Handles all portfolio.* WebSocket actions.
  */
 public class PortfolioHandler implements HandlerInterface {
-
-	/**
-	 * Default constructor.
-	 */
-	public PortfolioHandler() {}
-
 
 	@Override
 	public String handle(String action, JSONObject data) {
@@ -21,18 +16,12 @@ public class PortfolioHandler implements HandlerInterface {
 			case "portfolio.get":
 				return getPortfolio(data);
 			case "portfolio.list":
-				return listPortfolios(data);
+				return listPortfolios();
 			default:
 				throw new IllegalArgumentException("Unknown portfolio action: " + action);
 		}
 	}
 
-	/**
-	 * Handles portfolio.get action.
-	 *
-	 * @param data JSON object with required "id" field
-	 * @return JSON string with portfolio data (stub)
-	 */
 	private String getPortfolio(JSONObject data) {
 		if (data == null || !data.has("id")) {
 			throw new IllegalArgumentException("Missing 'id'");
@@ -44,14 +33,18 @@ public class PortfolioHandler implements HandlerInterface {
 	}
 
 	/**
-	 * Handles portfolio.list action.
+	 * Fetches all portfolios from the PORTFOLIOS table.
 	 *
-	 * @param data optional data (unused)
-	 * @return JSON string with portfolio list stub
+	 * @return JSON string with an array under key "portfolios"
 	 */
-	private String listPortfolios(JSONObject data) {
+	private String listPortfolios() {
 		JSONObject result = new JSONObject();
-		result.put("portfolios", "Portfolio list stub");
+		try {
+			JSONArray portfolios = DatabaseHelper.fetchAllRows("PORTFOLIOS");
+			result.put("portfolios", portfolios);
+		} catch (Exception e) {
+			result.put("error", "DB error: " + e.getMessage());
+		}
 		return result.toString();
 	}
 }
