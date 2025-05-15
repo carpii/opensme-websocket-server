@@ -51,7 +51,11 @@ public class PortfolioHandler implements HandlerInterface {
 
         JSONObject portfolio = new JSONObject();
 
-        String query = "SELECT * FROM PORTFOLIOS WHERE ID = ?";
+        // Updated query to explicitly select each field
+        String query = "SELECT ID, POS, NAME, DATE_ADDED, DESCRIPTION, CASH, CURRENCY, " +
+                       "DEFAULT_COSTS, OVERRIDES, UUID, SYNC_UPDATED_AT, SYNC_DELETED_AT, " +
+                       "SYNC_POSITION_UPDATED_AT, SYNC_IGNORE " +
+                       "FROM PORTFOLIOS WHERE ID = ?";
         try (
             Connection conn = DatabaseHelper.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)
@@ -68,6 +72,11 @@ public class PortfolioHandler implements HandlerInterface {
                     portfolio.put("syncDeletedAt", rs.getTimestamp("SYNC_DELETED_AT"));
                     portfolio.put("syncIgnore", rs.getBoolean("SYNC_IGNORE"));
                     portfolio.put("pos", rs.getInt("POS"));
+                    portfolio.put("cash", rs.getBigDecimal("CASH"));
+                    portfolio.put("defaultCosts", rs.getBigDecimal("DEFAULT_COSTS"));
+                    portfolio.put("overrides", rs.getString("OVERRIDES"));
+                    portfolio.put("uuid", rs.getString("UUID"));
+                    portfolio.put("syncPositionUpdatedAt", rs.getTimestamp("SYNC_POSITION_UPDATED_AT"));
                 } else {
                     throw new IllegalArgumentException("Portfolio not found for ID: " + portfolioId);
                 }
