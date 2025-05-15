@@ -1,7 +1,5 @@
 package backend.handlers;
 
-import backend.handlers.PortfolioHandler;
-import backend.handlers.PortfolioGroupHandler;
 import backend.models.Portfolio;
 import org.json.JSONObject;
 import java.util.HashMap;

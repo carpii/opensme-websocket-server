@@ -3,7 +3,7 @@ package backend.handlers;
 import backend.handlers.HandlerInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import backend.util.DatabaseHelper;
+import backend.DatabaseHelper;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

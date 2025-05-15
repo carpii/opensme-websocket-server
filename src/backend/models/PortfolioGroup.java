@@ -1,8 +1,8 @@
 package backend.models;
+import backend.DatabaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import util.DatabaseHelper; // Import DatabaseHelper
 
 import java.sql.*;
 import java.util.ArrayList;

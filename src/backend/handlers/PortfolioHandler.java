@@ -1,11 +1,9 @@
 package backend.handlers;
 
-import backend.handlers.HandlerInterface;
+import backend.DatabaseHelper;
 import backend.models.Portfolio;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import backend.util.DatabaseHelper;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

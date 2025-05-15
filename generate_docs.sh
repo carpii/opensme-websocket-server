@@ -9,8 +9,7 @@ mvn dependency:build-classpath -Dmdep.outputFile=classpath.txt >/dev/null
 # Find existing packages with .java files
 PACKAGES=$(find src/backend -type f -name "*.java" -exec dirname {} \; | \
     sort -u | \
-    sed 's/.*backend\///' | \
-    grep -v '^$' | \
+    sed 's/.*src\///' | \
     tr '/' '.' | \
     tr '\n' ':' | \
     sed 's/:$//')
@@ -19,9 +18,9 @@ echo "Generating documentation for packages: ${PACKAGES}"
 
 # Generate Javadoc documentation
 javadoc -d docs \
-    -sourcepath src/backend \
+    -sourcepath src \
     -classpath "target/classes:jar/h2-1.3.175.jar:$(cat classpath.txt)" \
-    -subpackages backend.handlers:backend.models \
+    -subpackages backend:backend.handlers:backend.models \
     -private \
     -author \
     -version \

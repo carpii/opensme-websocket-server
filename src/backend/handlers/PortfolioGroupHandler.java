@@ -1,10 +1,13 @@
 package backend.handlers;
 
-import backend.handlers.HandlerInterface;
+import backend.DatabaseHelper;
 import backend.models.PortfolioGroup;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import backend.util.DatabaseHelper;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Handles all portfolioGroup.* WebSocket actions.

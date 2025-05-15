@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.UUID;
-import handlers.Router;
+import backend.handlers.Router;
 
 
 @ServerEndpoint(value = "/ws")

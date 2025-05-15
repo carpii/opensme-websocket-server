@@ -1,4 +1,4 @@
-package backend.util;
+package backend;
 
 import backend.models.Portfolio;
 import org.json.JSONArray;
@@ -13,8 +13,13 @@ import java.util.ArrayList;
  */
 public class DatabaseHelper {
 
+    /** The JDBC URL for connecting to the H2 database */
     private static final String DB_URL = "jdbc:h2:./db/sme";
+    
+    /** The database user name */
     private static final String DB_USER = "";
+    
+    /** The database password */
     private static final String DB_PASSWORD = "";
 
     /**
