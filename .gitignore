@@ -1,4 +1,5 @@
 db/*.db
 docs/*
+export/*
 target
 cp.txt
