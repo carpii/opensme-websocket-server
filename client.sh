@@ -5,11 +5,11 @@ show_usage() {
     echo "Usage: ${0} <action> [id]"
     echo ""
     echo "Available actions:"
-    echo "  portfolio.get <id>     - Fetch a specific portfolio by ID"
-    echo "  portfolio.getitems <id> - Fetch all items in a portfolio"
-    echo "  portfolio.list         - List all portfolios"
-    echo "  portfolioGroup.list    - List all portfolio groups"
-    echo "  table.list            - List all database tables"
+    echo "  portfolio.get <id>      - Fetch a specific portfolio by ID"
+    echo "  portfolio.get_items <id> - Fetch all items in a portfolio"
+    echo "  portfolio.list          - List all portfolios"
+    echo "  portfolio_group.list    - List all portfolio groups"
+    echo "  table.list             - List all database tables"
     echo ""
 }
 
@@ -23,7 +23,7 @@ ACTION=${1}
 ID=${2}
 
 # List of valid actions
-VALID_ACTIONS=("portfolio.list" "portfolio.get" "portfolio.getitems" "portfolioGroup.list" "table.list")
+VALID_ACTIONS=("portfolio.list" "portfolio.get" "portfolio.get_items" "portfolio_group.list" "table.list")
 
 # Check if the action is valid
 if [[ ! " ${VALID_ACTIONS[@]} " =~ " ${ACTION} " ]]; then
@@ -41,9 +41,9 @@ if [ "${ACTION}" = "portfolio.get" ]; then
         exit 1
     fi
     java -cp "target/classes:jar/h2-1.3.175.jar:$(cat classpath.txt)" backend.WebSocketClient "${ACTION}" "{\"id\":\"${ID}\"}"
-elif [ "${ACTION}" = "portfolio.getitems" ]; then
+elif [ "${ACTION}" = "portfolio.get_items" ]; then
     if [ -z "${ID}" ]; then
-        echo '{"error": "portfolio.getitems requires a second argument: id"}' >&2
+        echo '{"error": "portfolio.get_items requires a second argument: id"}' >&2
         exit 1
     fi
     java -cp "target/classes:jar/h2-1.3.175.jar:$(cat classpath.txt)" backend.WebSocketClient "${ACTION}" "{\"id\":\"${ID}\"}"

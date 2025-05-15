@@ -28,7 +28,7 @@ public class PortfolioHandler implements HandlerInterface {
                 return listPortfolios();
             case "portfolio.get":
                 return getPortfolio(data);
-            case "portfolio.getitems":
+            case "portfolio.get_items":    // Changed from portfolio.getitems
                 return getPortfolioItems(data);
             default:
                 throw new IllegalArgumentException("Unknown portfolio action: " + action);

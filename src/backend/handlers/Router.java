@@ -17,7 +17,7 @@ public class Router {
 
     static {
         registry.put("portfolio", new PortfolioHandler());
-        registry.put("portfolioGroup", new PortfolioGroupHandler());
+        registry.put("portfolio_group", new PortfolioGroupHandler());
         registry.put("table", new TableHandler());
     }
 
