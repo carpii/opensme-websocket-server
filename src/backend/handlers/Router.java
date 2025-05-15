@@ -1,8 +1,8 @@
-package handlers;
+package backend.handlers;
 
-import handlers.PortfolioHandler;
-import handlers.PortfolioGroupHandler;
-import models.Portfolio;
+import backend.handlers.PortfolioHandler;
+import backend.handlers.PortfolioGroupHandler;
+import backend.models.Portfolio;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;

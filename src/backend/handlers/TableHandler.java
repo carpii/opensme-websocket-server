@@ -1,14 +1,14 @@
-package handlers;
+package backend.handlers;
 
-import handlers.HandlerInterface;
+import backend.handlers.HandlerInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import backend.util.DatabaseHelper;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import util.DatabaseHelper;
 
 /**
  * Handles all table.* WebSocket actions.

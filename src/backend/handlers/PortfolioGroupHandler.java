@@ -1,7 +1,10 @@
-package handlers;
+package backend.handlers;
 
+import backend.handlers.HandlerInterface;
+import backend.models.PortfolioGroup;
 import org.json.JSONArray;
-import util.DatabaseHelper;
+import org.json.JSONObject;
+import backend.util.DatabaseHelper;
 
 /**
  * Handles all portfolioGroup.* WebSocket actions.
@@ -14,7 +17,7 @@ public class PortfolioGroupHandler implements HandlerInterface {
     public PortfolioGroupHandler() {}
 
     @Override
-    public Object handle(String action, org.json.JSONObject data) {
+    public Object handle(String action, JSONObject data) {
         switch (action) {
             case "portfolioGroup.list":
                 return listPortfolioGroups(); // returns JSONArray directly

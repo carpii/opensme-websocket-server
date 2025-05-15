@@ -1,6 +1,6 @@
-package util;
+package backend.util;
 
-import models.Portfolio;
+import backend.models.Portfolio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

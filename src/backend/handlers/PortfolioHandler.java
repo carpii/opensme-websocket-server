@@ -1,10 +1,10 @@
-package handlers;
+package backend.handlers;
 
-import handlers.HandlerInterface;
-import models.Portfolio; // Import the Portfolio class
+import backend.handlers.HandlerInterface;
+import backend.models.Portfolio;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import util.DatabaseHelper;
+import backend.util.DatabaseHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package models;
+package backend.models;
 
 import org.json.JSONObject;
 

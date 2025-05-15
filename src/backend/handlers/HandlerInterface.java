@@ -1,4 +1,4 @@
-package handlers;
+package backend.handlers;
 
 import org.json.JSONObject;
 
