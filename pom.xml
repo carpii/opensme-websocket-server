@@ -39,9 +39,4 @@
 			<version>20230227</version>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<sourceDirectory>src/backend</sourceDirectory>
-		<!-- ...existing build configuration... -->
-	</build>
 </project>
