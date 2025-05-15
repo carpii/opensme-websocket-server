@@ -1,3 +1,5 @@
+package backend;
+
 import jakarta.websocket.*;
 import org.json.JSONObject;
 

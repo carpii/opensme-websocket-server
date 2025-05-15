@@ -1,3 +1,5 @@
+package backend;
+
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.glassfish.tyrus.server.Server;
