@@ -12,6 +12,9 @@ import java.util.Map;
  */
 public class Router {
 
+    /**
+     * Registry mapping namespace strings to their handlers
+     */
     private static final Map<String, HandlerInterface> registry = new HashMap<>();
 
     static {
@@ -25,6 +28,14 @@ public class Router {
      */
     public Router() {}
 
+    /**
+     * Handles a WebSocket request by routing it to the appropriate handler.
+     *
+     * @param requestId unique identifier for the request
+     * @param action the action to handle (e.g., "portfolio.get")
+     * @param data JSON object containing action parameters
+     * @return JSON string containing the response
+     */
     public static String handle(String requestId, String action, JSONObject data) {
         JSONObject response = new JSONObject();
         response.put("requestID", requestId);
