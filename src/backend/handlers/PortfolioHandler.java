@@ -24,10 +24,12 @@ public class PortfolioHandler implements HandlerInterface {
     @Override
     public Object handle(String action, JSONObject data) {
         switch (action) {
-            case "portfolio.get":
-                return getPortfolio(data); // returns JSONObject
             case "portfolio.list":
-                return listPortfolios();   // returns JSONArray
+                return listPortfolios();
+            case "portfolio.get":
+                return getPortfolio(data);
+            case "portfolio.getitems":
+                return getPortfolioItems(data);
             default:
                 throw new IllegalArgumentException("Unknown portfolio action: " + action);
         }
@@ -51,9 +53,9 @@ public class PortfolioHandler implements HandlerInterface {
 
         // Updated query to explicitly select each field
         String query = "SELECT ID, POS, NAME, DATE_ADDED, DESCRIPTION, CASH, CURRENCY, " +
-                       "DEFAULT_COSTS, OVERRIDES, UUID, SYNC_UPDATED_AT, SYNC_DELETED_AT, " +
-                       "SYNC_POSITION_UPDATED_AT, SYNC_IGNORE " +
-                       "FROM PORTFOLIOS WHERE ID = ?";
+                        "DEFAULT_COSTS, OVERRIDES, UUID, SYNC_UPDATED_AT, SYNC_DELETED_AT, " +
+                        "SYNC_POSITION_UPDATED_AT, SYNC_IGNORE " +
+                        "FROM PORTFOLIOS WHERE ID = ?";
         try (
             Connection conn = DatabaseHelper.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)
@@ -137,5 +139,30 @@ public class PortfolioHandler implements HandlerInterface {
         }
 
         return portfolios;
+    }
+
+    /**
+     * Fetches portfolio items for a specific portfolio ID.
+     *
+     * @param data JSON object containing the portfolio ID
+     * @return JSONArray of portfolio items
+     */
+    private JSONArray getPortfolioItems(JSONObject data) {
+        if (data == null || !data.has("id")) {
+            throw new IllegalArgumentException("Missing portfolio id");
+        }
+
+        String sql = "SELECT ID, PORTFOLIO_ID, POS, SYMBOL, NAME, POSITION_TYPE, " +
+                    "DATE_ADDED, CURRENCY, BUY_PRICE, SHARES, ACB_PER_SHARE, " +
+                    "CACHED_LAST, TARGET_PRICE, PROVIDER, EXCHANGE, COMMENT, " +
+                    "OVERRIDES, TRANSACTION_UUID, UUID, SYNC_UPDATED_AT, " +
+                    "SYNC_DELETED_AT, SYNC_POSITION_UPDATED_AT, SYNC_IGNORE, " +
+                    "SYNC_CACHEDPRICE_UPDATED_AT, LAST_UPDATED_AT " +
+                    "FROM PORTFOLIO_ITEMS WHERE PORTFOLIO_ID = ?";
+        try {
+            return DatabaseHelper.executeQuery(sql, data.getString("id"));
+        } catch (SQLException e) {
+            throw new RuntimeException("DB error: " + e.getMessage(), e);
+        }
     }
 }
