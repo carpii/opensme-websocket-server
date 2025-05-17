@@ -1,4 +1,4 @@
-package backend;
+package com.opensme.backend;
 
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.UUID;
-import backend.handlers.Router;
+import com.opensme.backend.handlers.Router;
 
 /**
  * WebSocket server implementation that handles client connections and routes requests.

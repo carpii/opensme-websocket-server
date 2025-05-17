@@ -1,4 +1,4 @@
-package backend.handlers;
+package com.opensme.backend.handlers;
 
 import org.json.JSONObject;
 

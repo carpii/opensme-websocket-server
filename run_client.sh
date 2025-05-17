@@ -1,10 +1,8 @@
 #!/bin/bash
-# filepath: /home/carpii/dev/opensme-websocket-server/client.sh
-
 show_usage() {
     echo "Usage: ${0} <action> [id]"
     echo ""
-    echo "Available actions:"
+    echo "Available CLI actions:"
     echo "  portfolio.get <id>      - Fetch a specific portfolio by ID"
     echo "  portfolio.get_items <id> - Fetch all items in a portfolio"
     echo "  portfolio.list          - List all portfolios"
@@ -19,8 +17,12 @@ if [ "${#}" -eq 0 ] || [ "${1}" == "--help" ]; then
     exit 0
 fi
 
+# CLI mode
 ACTION=${1}
 ID=${2}
+
+# Get classpath from Maven
+CLASSPATH=$(mvn -q exec:exec -Dexec.executable=echo -Dexec.args="%classpath")
 
 # List of valid actions
 VALID_ACTIONS=("portfolio.list" "portfolio.get" "portfolio.get_items" "portfolio_group.list" "table.list")
@@ -33,22 +35,13 @@ if [[ ! " ${VALID_ACTIONS[@]} " =~ " ${ACTION} " ]]; then
     exit 1
 fi
 
-mvn dependency:build-classpath -Dmdep.outputFile=classpath.txt >/dev/null
-
-if [ "${ACTION}" = "portfolio.get" ]; then
+# Run the appropriate command
+if [ "${ACTION}" = "portfolio.get" ] || [ "${ACTION}" = "portfolio.get_items" ]; then
     if [ -z "${ID}" ]; then
-        echo '{"error": "portfolio.get requires a second argument: id"}' >&2
+        echo "{\"error\": \"${ACTION} requires a second argument: id\"}" >&2
         exit 1
     fi
-    java -cp "target/classes:jar/h2-1.3.175.jar:$(cat classpath.txt)" backend.WebSocketClient "${ACTION}" "{\"id\":\"${ID}\"}"
-elif [ "${ACTION}" = "portfolio.get_items" ]; then
-    if [ -z "${ID}" ]; then
-        echo '{"error": "portfolio.get_items requires a second argument: id"}' >&2
-        exit 1
-    fi
-    java -cp "target/classes:jar/h2-1.3.175.jar:$(cat classpath.txt)" backend.WebSocketClient "${ACTION}" "{\"id\":\"${ID}\"}"
+    java -cp "${CLASSPATH}" com.opensme.backend.WebSocketClient "${ACTION}" "{\"id\":\"${ID}\"}"
 else
-    java -cp "target/classes:jar/h2-1.3.175.jar:$(cat classpath.txt)" backend.WebSocketClient "${ACTION}"
+    java -cp "${CLASSPATH}" com.opensme.backend.WebSocketClient "${ACTION}"
 fi
-
-rm -f classpath.txt

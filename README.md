@@ -1,55 +1,56 @@
 # OpenSME WebSocket Server
 
-A proof of concept websocket server and client for an OpenSME rewrite
-Ultimately everything is subject to change, including the backend database and DB schema
+A proof of concept websocket server and client for an OpenSME rewrite.
+Ultimately everything is subject to change, including the backend database and DB schema.
 
-## Prerequisites
-
-- Java 17 or higher
+### Prerequisites
+- Java 17+
 - Maven 3.x
-- H2 Database - drop a sme.h2.db into ./db
+- H2 Database (embedded)
 
-## Provides
+## Scripts
+Several shell scripts are provided to help build and run the application:
 
-- A WebSocketServer which can interrogate database and return JSON
-- A WebSocketClient which provides a client API 
-- bash scripts to interact with the API via CLI
-- Reads from ./db/sme.h2.db
+- `compile.sh` - Builds all modules using Maven
+- `run_server.sh` - Starts the WebSocket server on port 8025
+- `run_client.sh` - Command line interface to interact with the server
+- `frontend_run.sh` - Launches the Java Swing GUI
 
-## Compiling
-
+### Command Line Client
+List all portfolios:
 ```bash
-mvn install 
-./compile.sh
+./run_client.sh portfolio.list
 ```
 
-## Running (server)
-
-Launch the WebSocket server:
+Get specific portfolio:
 ```bash
-./server.sh
+./run_client.sh portfolio.get <id>
 ```
 
-## Running (client)
-
-All JSON output returned by client.sh can be piped into `jq` for readability
-
+Get portfolio items:
 ```bash
-# Show available commands
-./client.sh --help
-
-# Get all portfolio groups
-./client.sh portfolio_group.list
-
-# Get all portfolios
-./client.sh portfolio.list
-
-# Get portfolio by id
-./client.sh portfolio.get 1
-
-# Get holdings by portfolio id
-./client.sh portfolio.get_items 1
-
-# List all database tables
-./client.sh table.list
+./run_client.sh portfolio.get_items <id>
 ```
+
+List portfolio groups:
+```bash
+./run_client.sh portfolio_group.list
+```
+
+List database tables:
+```bash
+./run_client.sh table.list
+```
+
+## Features
+- WebSocket server for real-time portfolio data
+- Java Swing frontend for portfolio management
+- Command line interface for quick access
+- H2 database for persistent storage
+
+## API Endpoints
+- `portfolio.list` - List all portfolios
+- `portfolio.get` - Get portfolio by ID
+- `portfolio.get_items` - Get items in portfolio
+- `portfolio_group.list` - List all portfolio groups
+- `table.list` - List database tables

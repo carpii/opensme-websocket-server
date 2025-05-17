@@ -1,6 +1,6 @@
-package backend;
+package com.opensme.backend;
 
-import backend.models.Portfolio;
+import com.opensme.backend.models.Portfolio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -76,27 +76,27 @@ public class DatabaseHelper {
      * @throws SQLException if the query fails
      */
     public static JSONArray executeQuery(String sql, String... params) throws SQLException {
-        JSONArray results = new JSONArray();
-
-        try (Connection conn = getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        JSONArray array = new JSONArray();
+        try (
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
             for (int i = 0; i < params.length; i++) {
                 stmt.setString(i + 1, params[i]);
             }
-
+            
             try (ResultSet rs = stmt.executeQuery()) {
                 ResultSetMetaData meta = rs.getMetaData();
-                int columnCount = meta.getColumnCount();
                 while (rs.next()) {
-                    JSONObject row = new JSONObject();
-                    for (int i = 1; i <= columnCount; i++) {
-                        row.put(meta.getColumnName(i), rs.getObject(i));
+                    JSONObject obj = new JSONObject();
+                    for (int i = 1; i <= meta.getColumnCount(); i++) {
+                        String columnName = meta.getColumnName(i).toLowerCase(); // Convert to lowercase
+                        obj.put(columnName, rs.getObject(i));
                     }
-                    results.put(row);
+                    array.put(obj);
                 }
             }
         }
-        return results;
+        return array;
     }
 }

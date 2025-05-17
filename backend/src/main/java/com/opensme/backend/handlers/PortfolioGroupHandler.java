@@ -1,16 +1,13 @@
-package backend.handlers;
+package com.opensme.backend.handlers;
 
-import backend.DatabaseHelper;
-import backend.models.PortfolioGroup;
+import com.opensme.backend.DatabaseHelper;
+import com.opensme.backend.models.PortfolioGroup;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Handles all portfolioGroup.* WebSocket actions.
+ * Handles all portfolio_group.* WebSocket actions.
  */
 public class PortfolioGroupHandler implements HandlerInterface {
     
@@ -22,10 +19,10 @@ public class PortfolioGroupHandler implements HandlerInterface {
     @Override
     public Object handle(String action, JSONObject data) {
         switch (action) {
-            case "portfolioGroup.list":
-                return listPortfolioGroups(); // returns JSONArray directly
+            case "portfolio_group.list":
+                return listPortfolioGroups();
             default:
-                throw new IllegalArgumentException("Unknown portfolioGroup action: " + action);
+                throw new IllegalArgumentException("Unknown portfolio_group action: " + action);
         }
     }
 
@@ -35,9 +32,10 @@ public class PortfolioGroupHandler implements HandlerInterface {
      * @return JSONArray of portfolio group records
      */
     private JSONArray listPortfolioGroups() {
+        String sql = "SELECT ID, NAME, POS FROM PORTFOLIO_GROUPS ORDER BY POS";
         try {
-            return DatabaseHelper.fetchAllRows("PORTFOLIO_GROUPS");
-        } catch (Exception e) {
+            return DatabaseHelper.executeQuery(sql);
+        } catch (SQLException e) {
             throw new RuntimeException("DB error: " + e.getMessage(), e);
         }
     }

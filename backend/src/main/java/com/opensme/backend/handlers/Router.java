@@ -1,6 +1,6 @@
-package backend.handlers;
+package com.opensme.backend.handlers;
 
-import backend.models.Portfolio;
+import com.opensme.backend.models.Portfolio;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;

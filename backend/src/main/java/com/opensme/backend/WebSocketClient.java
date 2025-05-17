@@ -1,4 +1,4 @@
-package backend;
+package com.opensme.backend;
 
 import jakarta.websocket.*;
 import org.json.JSONObject;
@@ -93,24 +93,23 @@ public class WebSocketClient {
      * @throws Exception If connection or communication fails
      */
     public static void main(String[] args) throws Exception {
-        if (args.length < 1) {
-            System.err.println("Usage: WebSocketClient <action> [data]");
+        if (args.length == 0) {
+            System.out.println("Usage: WebSocketClient <action> [data]");
             System.exit(1);
         }
 
         String action = args[0];
-        String dataPayload = args.length > 1 ? args[1] : ""; // Optional second argument
+        String dataPayload = args.length > 1 ? args[1] : ""; 
 
         JSONObject msg = new JSONObject();
         msg.put("requestID", UUID.randomUUID().toString());
         msg.put("action", action);
 
-        // Include data only if it's provided
         if (!dataPayload.isEmpty()) {
             JSONObject data = new JSONObject(dataPayload);
             msg.put("data", data);
         } else {
-            msg.put("data", new JSONObject()); // Default to an empty JSON object
+            msg.put("data", new JSONObject());
         }
 
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();

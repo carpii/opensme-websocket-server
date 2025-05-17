@@ -1,6 +1,6 @@
-package backend.models;
-import backend.DatabaseHelper;
+package com.opensme.backend.models;
 
+import com.opensme.backend.DatabaseHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

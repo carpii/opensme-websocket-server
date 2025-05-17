@@ -1,12 +1,10 @@
-package backend.handlers;
+package com.opensme.backend.handlers;
 
-import backend.handlers.HandlerInterface;
+import com.opensme.backend.DatabaseHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import backend.DatabaseHelper;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
