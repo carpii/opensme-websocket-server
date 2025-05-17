@@ -8,13 +8,30 @@ import com.opensme.backend.models.Portfolio;
 import com.opensme.backend.models.PortfolioItem;
 import com.opensme.backend.handlers.PortfolioHandler;
 
+/**
+ * Main window for the portfolio management application.
+ * Displays a list of portfolios and their associated items.
+ */
 public class PortfolioUI extends JFrame {
+    /** List component showing available portfolios */
     private JList<Portfolio> portfolioList;
+    
+    /** Data model for the portfolio list */
     private DefaultListModel<Portfolio> listModel;
+    
+    /** Table showing items in the selected portfolio */
     private JTable itemTable;
+    
+    /** Data model for the items table */
     private DefaultTableModel tableModel;
+    
+    /** Handler for portfolio-related operations */
     private PortfolioHandler portfolioHandler;
 
+    /**
+     * Creates and initializes the main application window.
+     * Sets up the portfolio list, item table, and event handlers.
+     */
     public PortfolioUI() {
         setTitle("Portfolio Viewer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -82,6 +99,12 @@ public class PortfolioUI extends JFrame {
         }
     }
 
+    /**
+     * Application entry point.
+     * Sets up the look and feel and displays the main window.
+     * 
+     * @param args Command line arguments (unused)
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new PortfolioUI().setVisible(true);

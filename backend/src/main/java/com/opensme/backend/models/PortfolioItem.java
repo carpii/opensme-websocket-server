@@ -54,7 +54,22 @@ public class PortfolioItem {
     private String positionType;
 
     /**
-     * Creates a new portfolio item with specified attributes.
+     * Creates a new PortfolioItem
+     * @param id Unique identifier
+     * @param portfolioId Parent portfolio ID
+     * @param symbol Stock symbol
+     * @param shares Number of shares
+     * @param buyPrice Purchase price
+     * @param currency Currency code
+     * @param dateAdded Date item was added
+     * @param comment User notes
+     * @param overrides Custom overrides
+     * @param syncUpdatedAt Last sync update time
+     * @param syncDeletedAt Deletion time
+     * @param syncPositionUpdatedAt Position update time
+     * @param syncIgnore Sync ignore flag
+     * @param pos Position in list
+     * @param positionType Type of position
      */
     public PortfolioItem(int id, int portfolioId, String symbol, 
                         BigDecimal shares, BigDecimal buyPrice, String currency,
@@ -79,25 +94,9 @@ public class PortfolioItem {
         this.positionType = positionType;
     }
 
-    // Getters
-    public int getId() { return id; }
-    public int getPortfolioId() { return portfolioId; }
-    public String getSymbol() { return symbol; }
-    public BigDecimal getShares() { return shares; }
-    public BigDecimal getBuyPrice() { return buyPrice; }
-    public String getCurrency() { return currency; }
-    public Timestamp getDateAdded() { return dateAdded; }
-    public String getComment() { return comment; }  // Renamed from getNotes
-    public String getOverrides() { return overrides; }
-    public Timestamp getSyncUpdatedAt() { return syncUpdatedAt; }
-    public Timestamp getSyncDeletedAt() { return syncDeletedAt; }
-    public Timestamp getSyncPositionUpdatedAt() { return syncPositionUpdatedAt; }
-    public boolean getSyncIgnore() { return syncIgnore; }
-    public int getPos() { return pos; }
-    public String getPositionType() { return positionType; }
-
     /**
-     * Converts the portfolio item to a JSON object.
+     * Converts this item to JSON format
+     * @return JSON representation
      */
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
@@ -120,7 +119,9 @@ public class PortfolioItem {
     }
 
     /**
-     * Creates a portfolio item from a JSON object.
+     * Creates a PortfolioItem from JSON
+     * @param json JSON object to parse
+     * @return New PortfolioItem instance
      */
     public static PortfolioItem fromJSON(JSONObject json) {
         return new PortfolioItem(

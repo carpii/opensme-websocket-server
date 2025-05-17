@@ -118,6 +118,10 @@ public class PortfolioHandler implements HandlerInterface {
             .toJSON();
     }
 
+    /**
+     * Retrieves all portfolios from the database
+     * @return List of all Portfolio objects
+     */
     public List<Portfolio> getPortfolios() {
         return getPortfolios(null);
     }

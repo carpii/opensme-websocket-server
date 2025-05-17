@@ -145,7 +145,9 @@ public class Portfolio {
     }
 
     /**
-     * Creates a Portfolio instance from a JSON object.
+     * Creates a Portfolio object from a JSON representation
+     * @param json The JSON object containing portfolio data
+     * @return A new Portfolio instance
      */
     public static Portfolio fromJSON(JSONObject json) {
         return new Portfolio(
@@ -166,6 +168,10 @@ public class Portfolio {
         );
     }
 
+    /**
+     * Gets the unique identifier for this portfolio
+     * @return The portfolio ID
+     */
     public int getId() {
         return id;
     }
@@ -178,6 +184,10 @@ public class Portfolio {
         return name; 
     }
 
+    /**
+     * Creates a list of dummy portfolios for testing
+     * @return List of sample Portfolio objects
+     */
     public static List<Portfolio> getDummyPortfolios() {
         List<Portfolio> portfolios = new ArrayList<>();
         portfolios.add(new Portfolio(
